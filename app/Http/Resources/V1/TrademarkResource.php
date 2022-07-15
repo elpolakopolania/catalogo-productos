@@ -14,6 +14,9 @@ class TrademarkResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'name' => $this->name,
+            'reference' => $this->reference
+        ];
     }
 }

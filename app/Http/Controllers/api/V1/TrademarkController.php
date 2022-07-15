@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\TrademarkCollection;
+use App\Http\Resources\V1\TrademarkResource;
+use App\Models\Trademark;
 use Illuminate\Http\Request;
 
 class TrademarkController extends Controller
@@ -14,7 +17,7 @@ class TrademarkController extends Controller
      */
     public function index()
     {
-        //
+        return new TrademarkCollection(Trademark::latest()->paginate());
     }
 
     /**
@@ -44,9 +47,9 @@ class TrademarkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show(Trademark $trademark)
+    {   
+        return new TrademarkResource($trademark);
     }
 
     /**
