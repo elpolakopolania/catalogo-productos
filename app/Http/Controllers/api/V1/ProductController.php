@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\ProductCollecton;
+use App\Http\Resources\V1\ProductResource;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return new ProductCollecton(Product::latest()->paginate());
     }
 
     /**
@@ -35,7 +38,26 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $product = new Product();
+            $product->name = $request->name;
+            $product->size = $request->size;
+            $product->observation = $request->observation;
+            $product->trademarks_id = $request->trademarks_id;
+            $product->inventory_quantity = $request->inventory_quantity;
+            $product->boarding_date = $request->boarding_date;
+            $product->save();
+
+            return response()->json([
+                'message' => 'success',
+                'data' =>  $product
+            ]);
+        } catch (\Throwable $th) {
+            return  response()->json([
+                'message' => ' Error ' . $th->__toString()
+            ], 500);
+        }
     }
 
     /**
@@ -44,9 +66,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        //
+        return new ProductResource($product);
     }
 
     /**
@@ -69,7 +91,25 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $product = Product::findOrFail($id);
+            $product->name = $request->name;
+            $product->size = $request->size;
+            $product->observation = $request->observation;
+            $product->trademarks_id = $request->trademarks_id;
+            $product->inventory_quantity = $request->inventory_quantity;
+            $product->boarding_date = $request->boarding_date;
+            $product->save();
+
+            return response()->json([
+                'message' => 'success',
+                'data' => $product
+            ]);
+        } catch (\Throwable $th) {
+            return  response()->json([
+                'message' => ' Error ' . $th->__toString()
+            ], 500);
+        }
     }
 
     /**
@@ -80,6 +120,15 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            Product::destroy($id);
+            return response()->json([
+                'message' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            return  response()->json([
+                'message' => 'Error' .  $th->__toString()
+            ], 500);
+        }
     }
 }

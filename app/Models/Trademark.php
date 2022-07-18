@@ -9,6 +9,8 @@ class Trademark extends Model
 {
     use HasFactory;
 
+    protected $table ="trademarks";
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,4 +29,9 @@ class Trademark extends Model
     protected $hidden = [
         
     ];
+
+
+    public function products(){
+        return $this->hasMany('App\Models\Product', 'trademarks_id', 'id');
+    }
 }
