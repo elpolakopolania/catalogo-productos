@@ -14,7 +14,8 @@ class TrademarkFactory extends Factory
     public function definition()
     {
         return [
-            
+            'name' => $this->faker->name(),
+            'reference' =>  $this->faker->regexify('[A-Za-z0-9]{20}')
         ];
     }
 }

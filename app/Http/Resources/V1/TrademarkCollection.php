@@ -4,13 +4,12 @@ namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ProductCollecton extends ResourceCollection
+class TrademarkCollection extends ResourceCollection
 {
 
-    public $collects = ProductResource::class;
-
+    public $collects = TrademarkResource::class; 
     /**
-     * Transform the resource into an array.
+     * Transform the resource collection into an array.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable

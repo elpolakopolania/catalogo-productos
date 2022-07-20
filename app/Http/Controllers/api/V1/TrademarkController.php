@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\ProductCollecton;
-use App\Http\Resources\V1\ProductResource;
+use App\Http\Resources\V1\TrademarkCollection;
+use App\Http\Resources\V1\TrademarkResource;
 use App\Models\Product;
+use App\Models\Trademark;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
-class ProductController extends Controller
+class TrademarkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return new ProductCollecton(Product::all());
+        return new TrademarkCollection(Trademark::all());
     }
 
     /**
@@ -39,23 +41,18 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         try {
-
-            $product = new Product();
-            $product->name = $request->name;
-            $product->size = $request->size;
-            $product->observation = $request->observation;
-            $product->trademarks_id = intval($request->trademarks_id);
-            $product->inventory_quantity = intval($request->inventory_quantity);
-            $product->boarding_date =  date('Y-m-d H:i:s', strtotime($request->boarding_date)); ;
-            $product->save();
+            $trademark = new Trademark();
+            $trademark->name = $request->name;
+            $trademark->reference = $request->reference;
+            $trademark->save();
 
             return response()->json([
                 'message' => 'success',
-                'data' =>  $product
+                'data' => $trademark
             ]);
         } catch (\Throwable $th) {
             return  response()->json([
-                'message' => ' Error ' . $th->__toString()
+                'message' => 'Error' .  $th->__toString()
             ], 500);
         }
     }
@@ -66,9 +63,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Trademark $trademark)
     {
-        return new ProductResource($product);
+        return new TrademarkResource($trademark);
     }
 
     /**
@@ -92,22 +89,18 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $product = Product::findOrFail($id);
-            $product->name = $request->name;
-            $product->size = $request->size;
-            $product->observation = $request->observation;
-            $product->trademarks_id = intval($request->trademarks_id);
-            $product->inventory_quantity = intval($request->inventory_quantity);
-            $product->boarding_date =  date('Y-m-d H:i:s', strtotime($request->boarding_date)); ;
-            $product->save();
+            $trademark = Trademark::findOrFail($id);
+            $trademark->name = $request->name;
+            $trademark->reference = $request->reference;
+            $trademark->save();
 
             return response()->json([
                 'message' => 'success',
-                'data' => $product
+                'data' => $trademark
             ]);
         } catch (\Throwable $th) {
             return  response()->json([
-                'message' => ' Error ' . $th->__toString()
+                'message' => 'Error' .  $th->__toString()
             ], 500);
         }
     }
@@ -121,10 +114,17 @@ class ProductController extends Controller
     public function destroy($id)
     {
         try {
-            Product::destroy($id);
-            return response()->json([
-                'message' => 'success'
-            ]);
+            if (Product::where('trademarks_id', $id)->exists()) {
+                return response()->json([
+                    'message' => 'warnign',
+                    'info' => 'No se puede eliminar el registro por que ya está relacionado.'
+                ]);
+            } else {
+                Trademark::destroy($id);
+                return response()->json([
+                    'message' => 'success'
+                ]);
+            }
         } catch (\Throwable $th) {
             return  response()->json([
                 'message' => 'Error' .  $th->__toString()
