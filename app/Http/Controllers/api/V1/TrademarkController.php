@@ -19,7 +19,7 @@ class TrademarkController extends Controller
      */
     public function index()
     {
-        return new TrademarkCollection(Trademark::latest()->paginate());
+        return new TrademarkCollection(Trademark::all());
     }
 
     /**
@@ -114,9 +114,7 @@ class TrademarkController extends Controller
     public function destroy($id)
     {
         try {
-            $products = new Product();
-            $products = $products->where('trademarks_id', $id);
-            if ($products) {
+            if (Product::where('trademarks_id', $id)->exists()) {
                 return response()->json([
                     'message' => 'warnign',
                     'info' => 'No se puede eliminar el registro por que ya está relacionado.'

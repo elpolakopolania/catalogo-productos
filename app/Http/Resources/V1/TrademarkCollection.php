@@ -6,6 +6,8 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TrademarkCollection extends ResourceCollection
 {
+
+    public $collects = TrademarkResource::class; 
     /**
      * Transform the resource collection into an array.
      *
