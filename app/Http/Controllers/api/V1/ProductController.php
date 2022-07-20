@@ -44,9 +44,9 @@ class ProductController extends Controller
             $product->name = $request->name;
             $product->size = $request->size;
             $product->observation = $request->observation;
-            $product->trademarks_id = $request->trademarks_id;
-            $product->inventory_quantity = $request->inventory_quantity;
-            $product->boarding_date = $request->boarding_date;
+            $product->trademarks_id = intval($request->trademarks_id);
+            $product->inventory_quantity = intval($request->inventory_quantity);
+            $product->boarding_date =  date('Y-m-d H:i:s', strtotime($request->boarding_date)); ;
             $product->save();
 
             return response()->json([
@@ -96,9 +96,9 @@ class ProductController extends Controller
             $product->name = $request->name;
             $product->size = $request->size;
             $product->observation = $request->observation;
-            $product->trademarks_id = $request->trademarks_id;
-            $product->inventory_quantity = $request->inventory_quantity;
-            $product->boarding_date = $request->boarding_date;
+            $product->trademarks_id = intval($request->trademarks_id);
+            $product->inventory_quantity = intval($request->inventory_quantity);
+            $product->boarding_date =  date('Y-m-d H:i:s', strtotime($request->boarding_date)); ;
             $product->save();
 
             return response()->json([

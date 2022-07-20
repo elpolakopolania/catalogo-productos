@@ -15,6 +15,7 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'size' => $this->size,
             'observation' => $this->observation,
@@ -25,7 +26,7 @@ class ProductResource extends JsonResource
                 'reference' => $this->trademark->reference,
             ],
             'inventory_quantity' => $this->inventory_quantity,
-            'boarding_date' => $this->inventory_quantity
+            'boarding_date' => date('d/m/Y', strtotime($this->boarding_date))
         ];
     }
 }
