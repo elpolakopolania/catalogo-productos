@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\V1;
 
+
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\TrademarkCollection;
 use App\Http\Resources\V1\TrademarkResource;
